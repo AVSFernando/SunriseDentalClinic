@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sunrise Dental Clinic - Doctors</title>
+
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+
+<div class="dashboard-wrapper">
+
+  <!-- ================= SIDEBAR ================= -->
+
+  <aside class="sidebar">
+
+    <div class="clinic-logo">
+
+      <div class="logo-icon">
+        SD
+      </div>
+
+      <div>
+        <h4>Sunrise</h4>
+        <span>Dental Clinic</span>
+      </div>
+
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+      <a href="/dashboard" class="menu-item">
+        <span>🏠</span>
+        Dashboard
+      </a>
+
+      <a href="/patients" class="menu-item">
+        <span>👥</span>
+        Patients
+      </a>
+
+      <a href="/doctors" class="menu-item active">
+        <span>👨‍⚕️</span>
+        Doctors
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>📅</span>
+        Appointments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>🦷</span>
+        Treatments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>💳</span>
+        Payments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>📊</span>
+        Reports
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <a href="#" class="menu-item">
+        <span>⚙️</span>
+        Settings
+      </a>
+
+      <a href="/logout" class="menu-item logout">
+        <span>🚪</span>
+        Logout
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ================= MAIN CONTENT ================= -->
+
+  <main class="main-content">
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+      <div>
+        <h2>Doctors</h2>
+        <p>Manage clinic doctors</p>
+      </div>
+
+
+      <div class="profile-area">
+
+        <div class="profile">
+
+          <div class="profile-avatar">
+            A
+          </div>
+
+          <div>
+            <strong>Admin</strong>
+            <small>Administrator</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= DOCTORS CARD ================= -->
+
+    <div class="dashboard-card">
+
+      <div class="card-header">
+
+        <div>
+          <h4>Doctor Records</h4>
+          <p>View and manage all registered doctors</p>
+        </div>
+
+        <a href="/doctors/add" class="view-btn">
+          + Add Doctor
+        </a>
+
+      </div>
+
+
+      <!-- ================= TABLE ================= -->
+
+      <div style="overflow-x:auto;">
+
+        <table class="patient-table">
+
+          <thead>
+
+          <tr>
+
+            <th>ID</th>
+
+            <th>Doctor Name</th>
+
+            <th>Specialization</th>
+
+            <th>Phone</th>
+
+            <th>Email</th>
+
+            <th>Status</th>
+
+            <th>Action</th>
+
+          </tr>
+
+          </thead>
+
+
+          <tbody>
+
+          <!-- Doctors from database -->
+
+          <tr th:each="doctor : ${doctors}">
+
+            <td th:text="${doctor.id}">
+              1
+            </td>
+
+
+            <td>
+
+              <strong
+                      th:text="${doctor.fullName}">
+                Doctor Name
+              </strong>
+
+            </td>
+
+
+            <td th:text="${doctor.specialization}">
+              General Dentist
+            </td>
+
+
+            <td th:text="${doctor.phone}">
+              0771234567
+            </td>
+
+
+            <td th:text="${doctor.email}">
+              doctor@gmail.com
+            </td>
+
+
+            <td>
+
+                            <span class="table-status active"
+                                  th:if="${doctor.status == 'Active'}">
+                                Active
+                            </span>
+
+              <span class="table-status"
+                    th:unless="${doctor.status == 'Active'}"
+                    th:text="${doctor.status}">
+                                Inactive
+                            </span>
+
+            </td>
+
+
+            <td>
+
+              <a th:href="@{/doctors/edit/{id}(id=${doctor.id})}"
+                 style="
+                               color:#2563eb;
+                               margin-right:12px;
+                               font-weight:600;
+                               font-size:12px;
+                               ">
+                Edit
+              </a>
+
+
+              <a th:href="@{/doctors/delete/{id}(id=${doctor.id})}"
+                 onclick="return confirm('Are you sure you want to delete this doctor?');"
+                 style="
+                               color:#dc2626;
+                               font-weight:600;
+                               font-size:12px;
+                               ">
+                Delete
+              </a>
+
+            </td>
+
+          </tr>
+
+
+          <!-- No doctors -->
+
+          <tr th:if="${#lists.isEmpty(doctors)}">
+
+            <td colspan="7"
+                style="
+                            text-align:center;
+                            padding:40px;
+                            color:#94a3b8;
+                            ">
+
+              No doctors registered yet.
+
+            </td>
+
+          </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+
+</html>

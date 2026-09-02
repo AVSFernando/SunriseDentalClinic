@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sunrise Dental Clinic - Payment</title>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+    <style>
+        .form-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 900px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 14px;
+            font-family: inherit;
+            background: white;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .btn {
+            padding: 11px 20px;
+            border-radius: 9px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-save {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #1d4ed8;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-wrapper">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="clinic-logo">
+
+            <div class="logo-icon">
+                SD
+            </div>
+
+            <div>
+                <h4>Sunrise</h4>
+                <span>Dental Clinic</span>
+            </div>
+
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="/dashboard" class="menu-item">
+                <span>🏠</span>
+                Dashboard
+            </a>
+
+            <a href="/patients" class="menu-item">
+                <span>👥</span>
+                Patients
+            </a>
+
+            <a href="/doctors" class="menu-item">
+                <span>👨‍⚕️</span>
+                Doctors
+            </a>
+
+            <a href="/appointments" class="menu-item">
+                <span>📅</span>
+                Appointments
+            </a>
+
+            <a href="/treatments" class="menu-item">
+                <span>🦷</span>
+                Treatments
+            </a>
+
+            <a href="/payments" class="menu-item active">
+                <span>💳</span>
+                Payments
+            </a>
+
+            <a href="#" class="menu-item">
+                <span>📊</span>
+                Reports
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="menu-item">
+                <span>⚙️</span>
+                Settings
+            </a>
+
+            <a href="/logout" class="menu-item logout">
+                <span>🚪</span>
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h2 th:text="${payment.id == null
+                    ? 'Add Payment'
+                    : 'Edit Payment'}">
+                    Add Payment
+                </h2>
+
+                <p th:text="${payment.id == null
+                    ? 'Record a new patient payment'
+                    : 'Update payment information'}">
+                    Record a new patient payment
+                </p>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        A
+                    </div>
+
+                    <div>
+                        <strong>Admin</strong>
+                        <small>Administrator</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM CARD -->
+
+        <div class="form-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h4>
+                        Payment Information
+                    </h4>
+
+                    <p>
+                        Enter payment details below
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/payments/save}"
+                  th:object="${payment}"
+                  method="post">
+
+                <!-- Hidden ID -->
+
+                <input type="hidden"
+                       th:field="*{id}">
+
+
+                <div class="form-grid">
+
+                    <!-- PATIENT -->
+
+                    <div class="form-group">
+
+                        <label for="patient">
+                            Patient
+                        </label>
+
+                        <select id="patient"
+                                th:field="*{patient}"
+                                required>
+
+                            <option value="">
+                                Select Patient
+                            </option>
+
+                            <option th:each="patient : ${patients}"
+                                    th:value="${patient.id}"
+                                    th:text="${patient.fullName}">
+                                Patient Name
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- APPOINTMENT -->
+
+                    <div class="form-group">
+
+                        <label for="appointment">
+                            Appointment
+                        </label>
+
+                        <select id="appointment"
+                                th:field="*{appointment}">
+
+                            <option value="">
+                                No Appointment
+                            </option>
+
+                            <option th:each="appointment : ${appointments}"
+                                    th:value="${appointment.id}"
+                                    th:text="'Appointment #' + ${appointment.id}
+                                    + ' - '
+                                    + ${appointment.appointmentDate}">
+                                Appointment
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- AMOUNT -->
+
+                    <!-- TREATMENT COST -->
+
+                    <div class="form-group">
+
+                        <label for="treatmentCost">
+                            Treatment Cost (Rs.)
+                        </label>
+
+                        <input type="number"
+                               id="treatmentCost"
+                               th:field="*{treatmentCost}"
+                               placeholder="2000.00"
+                               min="0"
+                               step="0.01"
+                               required>
+
+                    </div>
+
+
+                    <!-- CONSULTATION FEE -->
+
+                    <div class="form-group">
+
+                        <label for="consultationFee">
+                            Consultation Fee (Rs.)
+                        </label>
+
+                        <input type="number"
+                               id="consultationFee"
+                               th:field="*{consultationFee}"
+                               placeholder="500.00"
+                               min="0"
+                               step="0.01"
+                               required>
+
+                    </div>
+
+
+                    <!-- TOTAL AMOUNT -->
+
+                    <div class="form-group">
+
+                        <label for="amount">
+                            Total Amount (Rs.)
+                        </label>
+
+                        <input type="number"
+                               id="amount"
+                               th:field="*{amount}"
+                               placeholder="2500.00"
+                               min="0"
+                               step="0.01"
+                               readonly>
+
+                    </div>
+
+
+                    <!-- PAYMENT METHOD -->
+
+                    <div class="form-group">
+
+                        <label for="paymentMethod">
+                            Payment Method
+                        </label>
+
+                        <select id="paymentMethod"
+                                th:field="*{paymentMethod}"
+                                required>
+
+                            <option value="">
+                                Select Payment Method
+                            </option>
+
+                            <option value="Cash">
+                                Cash
+                            </option>
+
+                            <option value="Card">
+                                Card
+                            </option>
+
+                            <option value="Bank Transfer">
+                                Bank Transfer
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PAYMENT DATE -->
+
+                    <div class="form-group">
+
+                        <label for="paymentDate">
+                            Payment Date
+                        </label>
+
+                        <input type="date"
+                               id="paymentDate"
+                               th:field="*{paymentDate}"
+                               required>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="form-group">
+
+                        <label for="status">
+                            Status
+                        </label>
+
+                        <select id="status"
+                                th:field="*{status}">
+
+                            <option value="Paid">
+                                Paid
+                            </option>
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                            <option value="Refunded">
+                                Refunded
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- NOTES -->
+
+                    <div class="form-group full">
+
+                        <label for="notes">
+                            Notes
+                        </label>
+
+                        <textarea id="notes"
+                                  th:field="*{notes}"
+                                  placeholder="Additional payment notes..."></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="form-actions">
+
+                    <a href="/payments"
+                       class="btn btn-cancel">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-save"
+                            th:text="${payment.id == null
+                                ? 'Save Payment'
+                                : 'Update Payment'}">
+                        Save Payment
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+<script>
+
+    const treatmentCostInput =
+        document.getElementById("treatmentCost");
+
+    const consultationFeeInput =
+        document.getElementById("consultationFee");
+
+    const amountInput =
+        document.getElementById("amount");
+
+
+    function calculateTotal() {
+
+        const treatmentCost =
+            parseFloat(treatmentCostInput.value) || 0;
+
+        const consultationFee =
+            parseFloat(consultationFeeInput.value) || 0;
+
+        const total =
+            treatmentCost + consultationFee;
+
+        amountInput.value =
+            total.toFixed(2);
+    }
+
+
+    treatmentCostInput.addEventListener(
+        "input",
+        calculateTotal
+    );
+
+    consultationFeeInput.addEventListener(
+        "input",
+        calculateTotal
+    );
+
+
+    // Calculate total when editing existing payment
+    document.addEventListener(
+        "DOMContentLoaded",
+        calculateTotal
+    );
+
+</script>
+
+</body>
+
+</html>

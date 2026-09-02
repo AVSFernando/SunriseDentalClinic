@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title th:text="${patient.id == null ? 'Add Patient - Sunrise Dental Clinic' : 'Edit Patient - Sunrise Dental Clinic'}">
+    Patient Form
+  </title>
+
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f5f7fb;
+        color: #1f2937;
+        min-height: 100vh;
+    }
+
+    .page-wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+        width: 260px;
+        background: #ffffff;
+        border-right: 1px solid #e5e7eb;
+        padding: 25px 18px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .clinic-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 5px 10px 30px;
+    }
+
+    .logo-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2563eb, #38bdf8);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
+
+    .clinic-logo h4 {
+        font-size: 19px;
+        color: #172554;
+    }
+
+    .clinic-logo span {
+        font-size: 12px;
+        color: #64748b;
+    }
+
+    .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        color: #64748b;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+    .menu-item:hover {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .menu-item.active {
+        background: #2563eb;
+        color: white;
+    }
+
+    .menu-item span {
+        width: 22px;
+        text-align: center;
+    }
+
+    .sidebar-bottom {
+        margin-top: auto;
+    }
+
+    .logout {
+        color: #dc2626;
+    }
+
+    /* MAIN */
+
+    .main-content {
+        flex: 1;
+        padding: 30px 35px;
+    }
+
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .topbar h2 {
+        font-size: 28px;
+        color: #111827;
+    }
+
+    .topbar p {
+        color: #64748b;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    .profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .profile-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #dbeafe;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+    }
+
+    .profile strong {
+        display: block;
+        font-size: 14px;
+    }
+
+    .profile small {
+        color: #94a3b8;
+    }
+
+    /* FORM CARD */
+
+    .form-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 900px;
+    }
+
+    .form-header {
+        margin-bottom: 25px;
+    }
+
+    .form-header h3 {
+        font-size: 22px;
+        color: #111827;
+        margin-bottom: 5px;
+    }
+
+    .form-header p {
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    label {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 7px;
+        color: #374151;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 12px 13px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: inherit;
+        background: white;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .btn {
+        padding: 11px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+    }
+
+    .btn-cancel {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .btn-cancel:hover {
+        background: #e2e8f0;
+    }
+
+    .btn-save {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #1d4ed8;
+    }
+
+    @media (max-width: 800px) {
+
+        .sidebar {
+            width: 75px;
+            padding: 20px 10px;
+        }
+
+        .clinic-logo div:not(.logo-icon) {
+            display: none;
+        }
+
+        .menu-item {
+            justify-content: center;
+            font-size: 0;
+        }
+
+        .menu-item span {
+            font-size: 18px;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page-wrapper">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+
+    <div class="clinic-logo">
+
+      <div class="logo-icon">
+        SD
+      </div>
+
+      <div>
+        <h4>Sunrise</h4>
+        <span>Dental Clinic</span>
+      </div>
+
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+      <a href="/dashboard" class="menu-item">
+        <span>🏠</span>
+        Dashboard
+      </a>
+
+      <a href="/patients" class="menu-item active">
+        <span>👥</span>
+        Patients
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>👨‍⚕️</span>
+        Doctors
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>📅</span>
+        Appointments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>🦷</span>
+        Treatments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>💳</span>
+        Payments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>📊</span>
+        Reports
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <a href="#" class="menu-item">
+        <span>⚙️</span>
+        Settings
+      </a>
+
+      <a href="/logout" class="menu-item logout">
+        <span>🚪</span>
+        Logout
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="main-content">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+      <div>
+
+        <h2
+                th:text="${patient.id == null ? 'Add Patient' : 'Edit Patient'}">
+          Add Patient
+        </h2>
+
+        <p
+                th:text="${patient.id == null
+                        ? 'Register a new patient'
+                        : 'Update patient information'}">
+          Register a new patient
+        </p>
+
+      </div>
+
+
+      <div class="profile">
+
+        <div class="profile-avatar">
+          A
+        </div>
+
+        <div>
+          <strong>Admin</strong>
+          <small>Administrator</small>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="form-card">
+
+      <div class="form-header">
+
+        <h3
+                th:text="${patient.id == null
+                        ? 'Patient Information'
+                        : 'Edit Patient Information'}">
+          Patient Information
+        </h3>
+
+        <p>
+          Enter the patient's personal and contact details.
+        </p>
+
+      </div>
+
+
+      <!-- IMPORTANT:
+           Same form works for ADD and EDIT
+      -->
+
+      <form th:action="@{/patients/save}"
+            th:object="${patient}"
+            method="post">
+
+        <!-- Hidden ID for EDIT -->
+
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="form-grid">
+
+
+          <!-- FULL NAME -->
+
+          <div class="form-group">
+
+            <label for="fullName">
+              Full Name
+            </label>
+
+            <input
+                    type="text"
+                    id="fullName"
+                    th:field="*{fullName}"
+                    placeholder="Enter patient's full name"
+                    required>
+
+          </div>
+
+
+          <!-- PHONE -->
+
+          <div class="form-group">
+
+            <label for="phone">
+              Phone Number
+            </label>
+
+            <input
+                    type="tel"
+                    id="phone"
+                    th:field="*{phone}"
+                    placeholder="Enter phone number"
+                    required>
+
+          </div>
+
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+
+            <label for="email">
+              Email Address
+            </label>
+
+            <input
+                    type="email"
+                    id="email"
+                    th:field="*{email}"
+                    placeholder="Enter email address">
+
+          </div>
+
+
+          <!-- DATE OF BIRTH -->
+
+          <div class="form-group">
+
+            <label for="dateOfBirth">
+              Date of Birth
+            </label>
+
+            <input
+                    type="date"
+                    id="dateOfBirth"
+                    th:field="*{dateOfBirth}">
+
+          </div>
+
+
+          <!-- GENDER -->
+
+          <div class="form-group">
+
+            <label for="gender">
+              Gender
+            </label>
+
+            <select
+                    id="gender"
+                    th:field="*{gender}">
+
+              <option value="">
+                Select gender
+              </option>
+
+              <option value="Male">
+                Male
+              </option>
+
+              <option value="Female">
+                Female
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- ADDRESS -->
+
+          <div class="form-group full">
+
+            <label for="address">
+              Address
+            </label>
+
+            <textarea
+                    id="address"
+                    th:field="*{address}"
+                    placeholder="Enter patient's address"></textarea>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="form-actions">
+
+          <a href="/patients"
+             class="btn btn-cancel">
+            Cancel
+          </a>
+
+
+          <button
+                  type="submit"
+                  class="btn btn-save"
+                  th:text="${patient.id == null
+                            ? 'Save Patient'
+                            : 'Update Patient'}">
+
+            Save Patient
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+
+</html>

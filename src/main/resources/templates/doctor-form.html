@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title th:text="${doctor.id == null ? 'Sunrise Dental Clinic - Add Doctor' : 'Sunrise Dental Clinic - Edit Doctor'}">
+    Sunrise Dental Clinic - Doctor
+  </title>
+
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+  <style>
+    .form-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 850px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 9px;
+        font-size: 14px;
+        outline: none;
+        background: white;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .btn {
+        padding: 11px 20px;
+        border-radius: 9px;
+        border: none;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .btn-cancel:hover {
+        background: #e2e8f0;
+    }
+
+    .btn-save {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #1d4ed8;
+    }
+
+    @media (max-width: 700px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="dashboard-wrapper">
+
+  <!-- ================= SIDEBAR ================= -->
+
+  <aside class="sidebar">
+
+    <div class="clinic-logo">
+
+      <div class="logo-icon">
+        SD
+      </div>
+
+      <div>
+        <h4>Sunrise</h4>
+        <span>Dental Clinic</span>
+      </div>
+
+    </div>
+
+    <nav class="sidebar-menu">
+
+      <a href="/dashboard" class="menu-item">
+        <span>🏠</span>
+        Dashboard
+      </a>
+
+      <a href="/patients" class="menu-item">
+        <span>👥</span>
+        Patients
+      </a>
+
+      <a href="/doctors" class="menu-item active">
+        <span>👨‍⚕️</span>
+        Doctors
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>📅</span>
+        Appointments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>🦷</span>
+        Treatments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>💳</span>
+        Payments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>📊</span>
+        Reports
+      </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+      <a href="#" class="menu-item">
+        <span>⚙️</span>
+        Settings
+      </a>
+
+      <a href="/logout" class="menu-item logout">
+        <span>🚪</span>
+        Logout
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ================= MAIN CONTENT ================= -->
+
+  <main class="main-content">
+
+    <div class="topbar">
+
+      <div>
+        <h2 th:text="${doctor.id == null ? 'Add Doctor' : 'Edit Doctor'}">
+          Add Doctor
+        </h2>
+
+        <p th:text="${doctor.id == null ? 'Register a new clinic doctor' : 'Update doctor information'}">
+          Register a new clinic doctor
+        </p>
+      </div>
+
+
+      <div class="profile-area">
+
+        <div class="profile">
+
+          <div class="profile-avatar">
+            A
+          </div>
+
+          <div>
+            <strong>Admin</strong>
+            <small>Administrator</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================= FORM CARD ================= -->
+
+    <div class="form-card">
+
+      <div class="card-header">
+
+        <div>
+          <h4 th:text="${doctor.id == null ? 'Doctor Information' : 'Edit Doctor Information'}">
+            Doctor Information
+          </h4>
+
+          <p>
+            Enter the doctor's details below
+          </p>
+        </div>
+
+      </div>
+
+
+      <!-- ================= FORM ================= -->
+
+      <form th:action="@{/doctors/save}"
+            th:object="${doctor}"
+            method="post">
+
+        <!-- Hidden ID for Edit -->
+
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="form-grid">
+
+          <!-- Full Name -->
+
+          <div class="form-group full">
+
+            <label for="fullName">
+              Full Name
+            </label>
+
+            <input type="text"
+                   id="fullName"
+                   th:field="*{fullName}"
+                   placeholder="Enter doctor's full name"
+                   required>
+
+          </div>
+
+
+          <!-- Specialization -->
+
+          <div class="form-group">
+
+            <label for="specialization">
+              Specialization
+            </label>
+
+            <input type="text"
+                   id="specialization"
+                   th:field="*{specialization}"
+                   placeholder="e.g. General Dentist"
+                   required>
+
+          </div>
+
+
+          <!-- Phone -->
+
+          <div class="form-group">
+
+            <label for="phone">
+              Phone Number
+            </label>
+
+            <input type="text"
+                   id="phone"
+                   th:field="*{phone}"
+                   placeholder="Enter phone number"
+                   required>
+
+          </div>
+
+
+          <!-- Email -->
+
+          <div class="form-group">
+
+            <label for="email">
+              Email Address
+            </label>
+
+            <input type="email"
+                   id="email"
+                   th:field="*{email}"
+                   placeholder="doctor@example.com">
+
+          </div>
+
+
+          <!-- Status -->
+
+          <div class="form-group">
+
+            <label for="status">
+              Status
+            </label>
+
+            <select id="status"
+                    th:field="*{status}">
+
+              <option value="Active">
+                Active
+              </option>
+
+              <option value="Inactive">
+                Inactive
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================= BUTTONS ================= -->
+
+        <div class="form-actions">
+
+          <a href="/doctors"
+             class="btn btn-cancel">
+            Cancel
+          </a>
+
+          <button type="submit"
+                  class="btn btn-save"
+                  th:text="${doctor.id == null ? 'Add Doctor' : 'Update Doctor'}">
+            Add Doctor
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+
+</html>

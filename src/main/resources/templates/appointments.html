@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sunrise Dental Clinic - Appointments</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/dashboard.css}">
+
+    <style>
+
+        .appointment-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .appointment-header h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #111827;
+        }
+
+        .appointment-header p {
+            margin: 5px 0 0;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-input {
+            width: 240px;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        .search-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .clear-btn {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 10px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .add-btn {
+            background: #2563eb;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .add-btn:hover {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .appointment-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        .appointment-table th {
+            background: #f8fafc;
+            padding: 13px;
+            text-align: left;
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .appointment-table td {
+            padding: 14px 13px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .appointment-table td strong {
+            color: #1e293b;
+        }
+
+        .appointment-number {
+            color: #2563eb !important;
+            font-weight: 700;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-confirmed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-completed {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .edit-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .delete-link {
+            color: #dc2626;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .empty-row {
+            text-align: center;
+            padding: 40px !important;
+            color: #94a3b8 !important;
+        }
+
+        @media (max-width: 900px) {
+
+            .appointment-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .header-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .search-form {
+                width: 100%;
+            }
+
+            .search-input {
+                flex: 1;
+                width: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="dashboard-wrapper">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="clinic-logo">
+
+            <div class="logo-icon">
+                SD
+            </div>
+
+            <div>
+                <h4>Sunrise</h4>
+                <span>Dental Clinic</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <a href="/dashboard"
+               class="menu-item">
+
+                <span>🏠</span>
+                Dashboard
+
+            </a>
+
+
+            <a href="/patients"
+               class="menu-item">
+
+                <span>👥</span>
+                Patients
+
+            </a>
+
+
+            <a href="/doctors"
+               class="menu-item">
+
+                <span>👨‍⚕️</span>
+                Doctors
+
+            </a>
+
+
+            <a href="/appointments"
+               class="menu-item active">
+
+                <span>📅</span>
+                Appointments
+
+            </a>
+
+
+            <a href="/treatments"
+               class="menu-item">
+
+                <span>🦷</span>
+                Treatments
+
+            </a>
+
+
+            <a href="/payments"
+               class="menu-item">
+
+                <span>💳</span>
+                Payments
+
+            </a>
+
+
+            <a href="/reports"
+               class="menu-item">
+
+                <span>📊</span>
+                Reports
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="/settings"
+               class="menu-item">
+
+                <span>⚙️</span>
+                Settings
+
+            </a>
+
+
+            <a href="/logout"
+               class="menu-item logout">
+
+                <span>🚪</span>
+                Logout
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h2>
+                    Appointments
+                </h2>
+
+                <p>
+                    Manage patient appointments
+                </p>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        A
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= APPOINTMENT CARD ================= -->
+
+        <div class="appointment-card">
+
+
+            <div class="appointment-header">
+
+                <div>
+
+                    <h3>
+                        Appointment Records
+                    </h3>
+
+                    <p>
+                        View and manage all clinic appointments
+                    </p>
+
+                </div>
+
+
+                <div class="header-actions">
+
+
+                    <!-- SEARCH -->
+
+                    <form action="/appointments"
+                          method="get"
+                          class="search-form">
+
+                        <input type="text"
+                               name="search"
+                               th:value="${search}"
+                               class="search-input"
+                               placeholder="Search Appointment No.">
+
+                        <button type="submit"
+                                class="search-btn">
+
+                            Search
+
+                        </button>
+
+
+                        <a href="/appointments"
+                           class="clear-btn">
+
+                            Clear
+
+                        </a>
+
+                    </form>
+
+
+                    <!-- ADD -->
+
+                    <a href="/appointments/add"
+                       class="add-btn">
+
+                        + Add Appointment
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= TABLE ================= -->
+
+            <div style="overflow-x:auto;">
+
+                <table class="appointment-table">
+
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Appointment No.
+                        </th>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Doctor
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Time
+                        </th>
+
+                        <th>
+                            Treatment
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    <!-- ================= APPOINTMENT ROW ================= -->
+
+                    <tr th:each="appointment : ${appointments}">
+
+
+                        <!-- ID -->
+
+                        <td th:text="${appointment.id}">
+                            1
+                        </td>
+
+
+                        <!-- APPOINTMENT NUMBER -->
+
+                        <td>
+
+                            <strong class="appointment-number"
+                                    th:text="${appointment.appointmentNumber}">
+
+                                APT-000000
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- PATIENT -->
+
+                        <td>
+
+                            <strong th:text="${appointment.patient.fullName}">
+
+                                Patient Name
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- DOCTOR -->
+
+                        <td>
+
+                            <strong th:text="${appointment.doctor.fullName}">
+
+                                Doctor Name
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td th:text="${appointment.appointmentDate}">
+
+                            2026-09-01
+
+                        </td>
+
+
+                        <!-- TIME -->
+
+                        <td th:text="${appointment.appointmentTime}">
+
+                            10:00
+
+                        </td>
+
+
+                        <!-- TREATMENT -->
+
+                        <td th:text="${appointment.treatment}">
+
+                            Dental Checkup
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+
+                            <span class="status-badge status-pending"
+                                  th:if="${appointment.status == 'Pending'}">
+
+                                Pending
+
+                            </span>
+
+
+                            <span class="status-badge status-confirmed"
+                                  th:if="${appointment.status == 'Confirmed'}">
+
+                                Confirmed
+
+                            </span>
+
+
+                            <span class="status-badge status-completed"
+                                  th:if="${appointment.status == 'Completed'}">
+
+                                Completed
+
+                            </span>
+
+
+                            <span class="status-badge status-cancelled"
+                                  th:if="${appointment.status == 'Cancelled'}">
+
+                                Cancelled
+
+                            </span>
+
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+
+                            <a th:href="@{/appointments/edit/{id}(id=${appointment.id})}"
+                               class="edit-link">
+
+                                Edit
+
+                            </a>
+
+
+                            <a th:href="@{/appointments/delete/{id}(id=${appointment.id})}"
+                               class="delete-link"
+                               onclick="return confirm('Are you sure you want to delete this appointment?');">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+
+                    </tr>
+
+
+                    <!-- ================= EMPTY ================= -->
+
+                    <tr th:if="${#lists.isEmpty(appointments)}">
+
+                        <td colspan="9"
+                            class="empty-row">
+
+                            <span th:if="${search != null and !#strings.isEmpty(search)}">
+
+                                No appointment found for:
+                                <strong th:text="${search}">
+                                    search
+                                </strong>
+
+                            </span>
+
+
+                            <span th:unless="${search != null and !#strings.isEmpty(search)}">
+
+                                No appointments scheduled yet.
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

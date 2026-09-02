@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sunrise Dental Clinic - Appointment</title>
+
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+  <style>
+    .form-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 900px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 9px;
+        font-size: 14px;
+        font-family: inherit;
+        background: white;
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .btn {
+        padding: 11px 20px;
+        border-radius: 9px;
+        border: none;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-cancel {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .btn-save {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #1d4ed8;
+    }
+
+    @media (max-width: 700px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="dashboard-wrapper">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+
+    <div class="clinic-logo">
+
+      <div class="logo-icon">
+        SD
+      </div>
+
+      <div>
+        <h4>Sunrise</h4>
+        <span>Dental Clinic</span>
+      </div>
+
+    </div>
+
+    <nav class="sidebar-menu">
+
+      <a href="/dashboard" class="menu-item">
+        <span>🏠</span>
+        Dashboard
+      </a>
+
+      <a href="/patients" class="menu-item">
+        <span>👥</span>
+        Patients
+      </a>
+
+      <a href="/doctors" class="menu-item">
+        <span>👨‍⚕️</span>
+        Doctors
+      </a>
+
+      <a href="/appointments" class="menu-item active">
+        <span>📅</span>
+        Appointments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>🦷</span>
+        Treatments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>💳</span>
+        Payments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>📊</span>
+        Reports
+      </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+      <a href="#" class="menu-item">
+        <span>⚙️</span>
+        Settings
+      </a>
+
+      <a href="/logout" class="menu-item logout">
+        <span>🚪</span>
+        Logout
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="main-content">
+
+    <div class="topbar">
+
+      <div>
+
+        <h2 th:text="${appointment.id == null
+                    ? 'Add Appointment'
+                    : 'Edit Appointment'}">
+          Add Appointment
+        </h2>
+
+        <p th:text="${appointment.id == null
+                    ? 'Schedule a new patient appointment'
+                    : 'Update appointment information'}">
+          Schedule a new patient appointment
+        </p>
+
+      </div>
+
+
+      <div class="profile-area">
+
+        <div class="profile">
+
+          <div class="profile-avatar">
+            A
+          </div>
+
+          <div>
+            <strong>Admin</strong>
+            <small>Administrator</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- FORM CARD -->
+
+    <div class="form-card">
+
+      <div class="card-header">
+
+        <div>
+
+          <h4>
+            Appointment Information
+          </h4>
+
+          <p>
+            Enter appointment details below
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <form th:action="@{/appointments/save}"
+            th:object="${appointment}"
+            method="post">
+
+        <!-- Hidden ID for Edit -->
+
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="form-grid">
+
+          <!-- PATIENT -->
+
+          <div class="form-group">
+
+            <label for="patient">
+              Patient
+            </label>
+
+            <select id="patient"
+                    th:field="*{patient}"
+                    required>
+
+              <option value="">
+                Select Patient
+              </option>
+
+              <option th:each="patient : ${patients}"
+                      th:value="${patient.id}"
+                      th:text="${patient.fullName}">
+                Patient Name
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- DOCTOR -->
+
+          <div class="form-group">
+
+            <label for="doctor">
+              Doctor
+            </label>
+
+            <select id="doctor"
+                    th:field="*{doctor}"
+                    required>
+
+              <option value="">
+                Select Doctor
+              </option>
+
+              <option th:each="doctor : ${doctors}"
+                      th:value="${doctor.id}"
+                      th:text="${doctor.fullName}">
+                Doctor Name
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- DATE -->
+
+          <div class="form-group">
+
+            <label for="appointmentDate">
+              Appointment Date
+            </label>
+
+            <input type="date"
+                   id="appointmentDate"
+                   th:field="*{appointmentDate}"
+                   required>
+
+          </div>
+
+
+          <!-- TIME -->
+
+          <div class="form-group">
+
+            <label for="appointmentTime">
+              Appointment Time
+            </label>
+
+            <input type="time"
+                   id="appointmentTime"
+                   th:field="*{appointmentTime}"
+                   required>
+
+          </div>
+
+
+          <!-- TREATMENT -->
+
+          <div class="form-group">
+
+            <label for="treatment">
+              Treatment
+            </label>
+
+            <input type="text"
+                   id="treatment"
+                   th:field="*{treatment}"
+                   placeholder="e.g. Dental Checkup">
+
+          </div>
+
+
+          <!-- STATUS -->
+
+          <div class="form-group">
+
+            <label for="status">
+              Status
+            </label>
+
+            <select id="status"
+                    th:field="*{status}">
+
+              <option value="Pending">
+                Pending
+              </option>
+
+              <option value="Confirmed">
+                Confirmed
+              </option>
+
+              <option value="Completed">
+                Completed
+              </option>
+
+              <option value="Cancelled">
+                Cancelled
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- NOTES -->
+
+          <div class="form-group full">
+
+            <label for="notes">
+              Notes
+            </label>
+
+            <textarea id="notes"
+                      th:field="*{notes}"
+                      placeholder="Additional appointment notes..."></textarea>
+
+          </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="form-actions">
+
+          <a href="/appointments"
+             class="btn btn-cancel">
+            Cancel
+          </a>
+
+          <button type="submit"
+                  class="btn btn-save"
+                  th:text="${appointment.id == null
+                                ? 'Save Appointment'
+                                : 'Update Appointment'}">
+            Save Appointment
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+
+</html>

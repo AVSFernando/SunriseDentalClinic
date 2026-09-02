@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Sunrise Dental Clinic - Reports</title>
+
+  <link rel="stylesheet"
+        th:href="@{/css/dashboard.css}">
+
+</head>
+
+
+<body>
+
+<div class="dashboard-wrapper">
+
+
+  <!-- ================= SIDEBAR ================= -->
+
+  <aside class="sidebar">
+
+    <div class="clinic-logo">
+
+      <div class="logo-icon">
+        SD
+      </div>
+
+      <div>
+        <h4>Sunrise</h4>
+        <span>Dental Clinic</span>
+      </div>
+
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+      <a href="/dashboard"
+         class="menu-item">
+
+        <span>🏠</span>
+        Dashboard
+
+      </a>
+
+
+      <a href="/patients"
+         class="menu-item">
+
+        <span>👥</span>
+        Patients
+
+      </a>
+
+
+      <a href="/doctors"
+         class="menu-item">
+
+        <span>👨‍⚕️</span>
+        Doctors
+
+      </a>
+
+
+      <a href="/appointments"
+         class="menu-item">
+
+        <span>📅</span>
+        Appointments
+
+      </a>
+
+
+      <a href="/treatments"
+         class="menu-item">
+
+        <span>🦷</span>
+        Treatments
+
+      </a>
+
+
+      <a href="/payments"
+         class="menu-item">
+
+        <span>💳</span>
+        Payments
+
+      </a>
+
+
+      <a href="/reports"
+         class="menu-item active">
+
+        <span>📊</span>
+        Reports
+
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <a href="#"
+         class="menu-item">
+
+        <span>⚙️</span>
+        Settings
+
+      </a>
+
+
+      <a href="/logout"
+         class="menu-item logout">
+
+        <span>🚪</span>
+        Logout
+
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ================= MAIN CONTENT ================= -->
+
+  <main class="main-content">
+
+
+    <!-- ================= TOPBAR ================= -->
+
+    <header class="topbar">
+
+      <div>
+
+        <h2>
+          Reports
+        </h2>
+
+        <p>
+          Clinic reports and statistics
+        </p>
+
+      </div>
+
+
+      <div class="profile-area">
+
+        <div class="profile">
+
+          <div class="profile-avatar">
+            A
+          </div>
+
+
+          <div>
+
+            <strong>
+              Admin
+            </strong>
+
+            <small>
+              Administrator
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- ================= REPORT STATISTICS ================= -->
+
+    <section class="stats-grid">
+
+
+      <!-- PATIENTS -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon blue">
+          👥
+        </div>
+
+
+        <div>
+
+                    <span>
+                        Total Patients
+                    </span>
+
+
+          <h3 th:text="${totalPatients}">
+            0
+          </h3>
+
+
+          <small>
+            Registered patient records
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- DOCTORS -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon purple">
+          👨‍⚕️
+        </div>
+
+
+        <div>
+
+                    <span>
+                        Total Doctors
+                    </span>
+
+
+          <h3 th:text="${totalDoctors}">
+            0
+          </h3>
+
+
+          <small>
+            Registered clinic doctors
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- APPOINTMENTS -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon green">
+          📅
+        </div>
+
+
+        <div>
+
+                    <span>
+                        Total Appointments
+                    </span>
+
+
+          <h3 th:text="${totalAppointments}">
+            0
+          </h3>
+
+
+          <small>
+            Appointment records
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- REVENUE -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon orange">
+          💰
+        </div>
+
+
+        <div>
+
+                    <span>
+                        Total Revenue
+                    </span>
+
+
+          <h3>
+
+            Rs.
+
+            <span th:text="${totalRevenue}">
+                            0.00
+                        </span>
+
+          </h3>
+
+
+          <small>
+            Paid payments
+          </small>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= CLINIC REPORTS ================= -->
+
+    <section class="dashboard-card">
+
+
+      <div class="card-header">
+
+        <div>
+
+          <h4>
+            Clinic Reports
+          </h4>
+
+          <p>
+            View detailed information from each clinic module
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="quick-actions">
+
+
+        <!-- PATIENT REPORT -->
+
+        <a href="/patients"
+           class="quick-action">
+
+                    <span>
+                        👥
+                    </span>
+
+
+          <div>
+
+            <strong>
+              Patient Report
+            </strong>
+
+
+            <small>
+              View all registered patients
+            </small>
+
+          </div>
+
+        </a>
+
+
+        <!-- DOCTOR REPORT -->
+
+        <a href="/doctors"
+           class="quick-action">
+
+                    <span>
+                        👨‍⚕️
+                    </span>
+
+
+          <div>
+
+            <strong>
+              Doctor Report
+            </strong>
+
+
+            <small>
+              View clinic doctors
+            </small>
+
+          </div>
+
+        </a>
+
+
+        <!-- APPOINTMENT REPORT -->
+
+        <a href="/appointments"
+           class="quick-action">
+
+                    <span>
+                        📅
+                    </span>
+
+
+          <div>
+
+            <strong>
+              Appointment Report
+            </strong>
+
+
+            <small>
+              View appointment records
+            </small>
+
+          </div>
+
+        </a>
+
+
+        <!-- TREATMENT REPORT -->
+
+        <a href="/treatments"
+           class="quick-action">
+
+                    <span>
+                        🦷
+                    </span>
+
+
+          <div>
+
+            <strong>
+              Treatment Report
+            </strong>
+
+
+            <small>
+              View treatment records
+            </small>
+
+          </div>
+
+        </a>
+
+
+        <!-- PAYMENT REPORT -->
+
+        <a href="/payments"
+           class="quick-action">
+
+                    <span>
+                        💳
+                    </span>
+
+
+          <div>
+
+            <strong>
+              Payment Report
+            </strong>
+
+
+            <small>
+              View payment records and revenue
+            </small>
+
+          </div>
+
+        </a>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= SUMMARY TABLE ================= -->
+
+    <section class="dashboard-card recent-card">
+
+
+      <div class="card-header">
+
+        <div>
+
+          <h4>
+            Clinic Summary
+          </h4>
+
+          <p>
+            Current database statistics
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div style="overflow-x:auto;">
+
+        <table class="patient-table">
+
+
+          <thead>
+
+          <tr>
+
+            <th>
+              Module
+            </th>
+
+            <th>
+              Total Records
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Action
+            </th>
+
+          </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+          <!-- PATIENTS -->
+
+          <tr>
+
+            <td>
+
+              <strong>
+                Patients
+              </strong>
+
+            </td>
+
+
+            <td th:text="${totalPatients}">
+              0
+            </td>
+
+
+            <td>
+
+                            <span class="table-status active">
+                                Active
+                            </span>
+
+            </td>
+
+
+            <td>
+
+              <a href="/patients"
+                 class="view-btn">
+
+                View
+
+              </a>
+
+            </td>
+
+          </tr>
+
+
+          <!-- DOCTORS -->
+
+          <tr>
+
+            <td>
+
+              <strong>
+                Doctors
+              </strong>
+
+            </td>
+
+
+            <td th:text="${totalDoctors}">
+              0
+            </td>
+
+
+            <td>
+
+                            <span class="table-status active">
+                                Active
+                            </span>
+
+            </td>
+
+
+            <td>
+
+              <a href="/doctors"
+                 class="view-btn">
+
+                View
+
+              </a>
+
+            </td>
+
+          </tr>
+
+
+          <!-- APPOINTMENTS -->
+
+          <tr>
+
+            <td>
+
+              <strong>
+                Appointments
+              </strong>
+
+            </td>
+
+
+            <td th:text="${totalAppointments}">
+              0
+            </td>
+
+
+            <td>
+
+                            <span class="table-status active">
+                                Active
+                            </span>
+
+            </td>
+
+
+            <td>
+
+              <a href="/appointments"
+                 class="view-btn">
+
+                View
+
+              </a>
+
+            </td>
+
+          </tr>
+
+
+          <!-- TREATMENTS -->
+
+          <tr>
+
+            <td>
+
+              <strong>
+                Treatments
+              </strong>
+
+            </td>
+
+
+            <td th:text="${totalTreatments}">
+              0
+            </td>
+
+
+            <td>
+
+                            <span class="table-status active">
+                                Active
+                            </span>
+
+            </td>
+
+
+            <td>
+
+              <a href="/treatments"
+                 class="view-btn">
+
+                View
+
+              </a>
+
+            </td>
+
+          </tr>
+
+
+          <!-- PAYMENTS -->
+
+          <tr>
+
+            <td>
+
+              <strong>
+                Payments / Revenue
+              </strong>
+
+            </td>
+
+
+            <td>
+
+              Rs.
+
+              <span th:text="${totalRevenue}">
+                                0.00
+                            </span>
+
+            </td>
+
+
+            <td>
+
+                            <span class="table-status active">
+                                Paid
+                            </span>
+
+            </td>
+
+
+            <td>
+
+              <a href="/payments"
+                 class="view-btn">
+
+                View
+
+              </a>
+
+            </td>
+
+          </tr>
+
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+</div>
+
+
+</body>
+
+</html>

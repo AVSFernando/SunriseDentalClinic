@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sunrise Dental Clinic - Treatment</title>
+
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+
+  <style>
+    .form-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 850px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 9px;
+        font-size: 14px;
+        font-family: inherit;
+        background: white;
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .btn {
+        padding: 11px 20px;
+        border-radius: 9px;
+        border: none;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-cancel {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .btn-save {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #1d4ed8;
+    }
+
+    @media (max-width: 700px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="dashboard-wrapper">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+
+    <div class="clinic-logo">
+
+      <div class="logo-icon">
+        SD
+      </div>
+
+      <div>
+        <h4>Sunrise</h4>
+        <span>Dental Clinic</span>
+      </div>
+
+    </div>
+
+    <nav class="sidebar-menu">
+
+      <a href="/dashboard" class="menu-item">
+        <span>🏠</span>
+        Dashboard
+      </a>
+
+      <a href="/patients" class="menu-item">
+        <span>👥</span>
+        Patients
+      </a>
+
+      <a href="/doctors" class="menu-item">
+        <span>👨‍⚕️</span>
+        Doctors
+      </a>
+
+      <a href="/appointments" class="menu-item">
+        <span>📅</span>
+        Appointments
+      </a>
+
+      <a href="/treatments" class="menu-item active">
+        <span>🦷</span>
+        Treatments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>💳</span>
+        Payments
+      </a>
+
+      <a href="#" class="menu-item">
+        <span>📊</span>
+        Reports
+      </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+      <a href="#" class="menu-item">
+        <span>⚙️</span>
+        Settings
+      </a>
+
+      <a href="/logout" class="menu-item logout">
+        <span>🚪</span>
+        Logout
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="main-content">
+
+    <div class="topbar">
+
+      <div>
+
+        <h2 th:text="${treatment.id == null
+                    ? 'Add Treatment'
+                    : 'Edit Treatment'}">
+          Add Treatment
+        </h2>
+
+        <p th:text="${treatment.id == null
+                    ? 'Register a new dental treatment'
+                    : 'Update treatment information'}">
+          Register a new dental treatment
+        </p>
+
+      </div>
+
+
+      <div class="profile-area">
+
+        <div class="profile">
+
+          <div class="profile-avatar">
+            A
+          </div>
+
+          <div>
+            <strong>Admin</strong>
+            <small>Administrator</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- FORM CARD -->
+
+    <div class="form-card">
+
+      <div class="card-header">
+
+        <div>
+          <h4>Treatment Information</h4>
+
+          <p>
+            Enter treatment details below
+          </p>
+        </div>
+
+      </div>
+
+
+      <form th:action="@{/treatments/save}"
+            th:object="${treatment}"
+            method="post">
+
+        <!-- Hidden ID -->
+
+        <input type="hidden"
+               th:field="*{id}">
+
+
+        <div class="form-grid">
+
+          <!-- NAME -->
+
+          <div class="form-group full">
+
+            <label for="name">
+              Treatment Name
+            </label>
+
+            <input type="text"
+                   id="name"
+                   th:field="*{name}"
+                   placeholder="e.g. Dental Checkup"
+                   required>
+
+          </div>
+
+
+          <!-- PRICE -->
+
+          <div class="form-group">
+
+            <label for="price">
+              Price (Rs.)
+            </label>
+
+            <input type="number"
+                   id="price"
+                   th:field="*{price}"
+                   placeholder="2500.00"
+                   min="0"
+                   step="0.01"
+                   required>
+
+          </div>
+
+
+          <!-- DURATION -->
+
+          <div class="form-group">
+
+            <label for="duration">
+              Duration (Minutes)
+            </label>
+
+            <input type="number"
+                   id="duration"
+                   th:field="*{duration}"
+                   placeholder="30"
+                   min="1">
+
+          </div>
+
+
+          <!-- STATUS -->
+
+          <div class="form-group">
+
+            <label for="status">
+              Status
+            </label>
+
+            <select id="status"
+                    th:field="*{status}">
+
+              <option value="Active">
+                Active
+              </option>
+
+              <option value="Inactive">
+                Inactive
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- DESCRIPTION -->
+
+          <div class="form-group full">
+
+            <label for="description">
+              Description
+            </label>
+
+            <textarea id="description"
+                      th:field="*{description}"
+                      placeholder="Describe the treatment..."></textarea>
+
+          </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="form-actions">
+
+          <a href="/treatments"
+             class="btn btn-cancel">
+            Cancel
+          </a>
+
+          <button type="submit"
+                  class="btn btn-save"
+                  th:text="${treatment.id == null
+                                ? 'Save Treatment'
+                                : 'Update Treatment'}">
+            Save Treatment
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+
+</html>

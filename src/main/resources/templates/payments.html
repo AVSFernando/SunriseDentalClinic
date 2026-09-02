@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sunrise Dental Clinic - Payments</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/dashboard.css}">
+
+    <style>
+
+        .payment-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .payment-header h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #111827;
+        }
+
+        .payment-header p {
+            margin: 5px 0 0;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .add-btn {
+            background: #2563eb;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .add-btn:hover {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .payment-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        .payment-table th {
+            background: #f8fafc;
+            padding: 13px;
+            text-align: left;
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .payment-table td {
+            padding: 14px 13px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .payment-table td strong {
+            color: #1e293b;
+        }
+
+        .amount {
+            font-weight: 700;
+            color: #15803d !important;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .status-paid {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-refunded {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .edit-link {
+            color: #2563eb;
+            font-weight: 600;
+            text-decoration: none;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+
+        .delete-link {
+            color: #dc2626;
+            font-weight: 600;
+            text-decoration: none;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+
+        .bill-link {
+            color: #16a34a;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .bill-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty-row {
+            text-align: center;
+            padding: 40px !important;
+            color: #94a3b8 !important;
+        }
+
+        @media (max-width: 900px) {
+
+            .payment-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="dashboard-wrapper">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="clinic-logo">
+
+            <div class="logo-icon">
+                SD
+            </div>
+
+            <div>
+                <h4>Sunrise</h4>
+                <span>Dental Clinic</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+
+            <a href="/dashboard"
+               class="menu-item">
+
+                <span>🏠</span>
+                Dashboard
+
+            </a>
+
+
+            <a href="/patients"
+               class="menu-item">
+
+                <span>👥</span>
+                Patients
+
+            </a>
+
+
+            <a href="/doctors"
+               class="menu-item">
+
+                <span>👨‍⚕️</span>
+                Doctors
+
+            </a>
+
+
+            <a href="/appointments"
+               class="menu-item">
+
+                <span>📅</span>
+                Appointments
+
+            </a>
+
+
+            <a href="/treatments"
+               class="menu-item">
+
+                <span>🦷</span>
+                Treatments
+
+            </a>
+
+
+            <a href="/payments"
+               class="menu-item active">
+
+                <span>💳</span>
+                Payments
+
+            </a>
+
+
+            <a href="/reports"
+               class="menu-item">
+
+                <span>📊</span>
+                Reports
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+
+            <a href="/settings"
+               class="menu-item">
+
+                <span>⚙️</span>
+                Settings
+
+            </a>
+
+
+            <a href="/logout"
+               class="menu-item logout">
+
+                <span>🚪</span>
+                Logout
+
+            </a>
+
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h2>
+                    Payments
+                </h2>
+
+                <p>
+                    Manage patient payments and transactions
+                </p>
+
+            </div>
+
+
+            <div class="profile-area">
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        A
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= PAYMENT CARD ================= -->
+
+        <div class="payment-card">
+
+
+            <div class="payment-header">
+
+                <div>
+
+                    <h3>
+                        Payment Records
+                    </h3>
+
+                    <p>
+                        View and manage all patient payments
+                    </p>
+
+                </div>
+
+
+                <a href="/payments/add"
+                   class="add-btn">
+
+                    + Add Payment
+
+                </a>
+
+            </div>
+
+
+            <!-- ================= TABLE ================= -->
+
+            <div style="overflow-x:auto;">
+
+                <table class="payment-table">
+
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Appointment
+                        </th>
+
+                        <th>
+                            Treatment Cost
+                        </th>
+
+                        <th>
+                            Consultation Fee
+                        </th>
+
+                        <th>
+                            Total Amount
+                        </th>
+
+                        <th>
+                            Payment Method
+                        </th>
+
+                        <th>
+                            Payment Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    <!-- ================= PAYMENT ROW ================= -->
+
+                    <tr th:each="payment : ${payments}">
+
+
+                        <!-- ID -->
+
+                        <td th:text="${payment.id}">
+                            1
+                        </td>
+
+
+                        <!-- PATIENT -->
+
+                        <td>
+
+                            <strong th:text="${payment.patient.fullName}">
+
+                                Patient Name
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- APPOINTMENT -->
+
+                        <td>
+
+                            <span th:if="${payment.appointment != null}"
+                                  th:text="${payment.appointment.appointmentNumber}">
+
+                                APT-000000
+
+                            </span>
+
+
+                            <span th:unless="${payment.appointment != null}">
+
+                                -
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- TREATMENT COST -->
+
+                        <td class="amount">
+
+                            Rs.
+
+                            <span th:text="${payment.treatmentCost}">
+                                2000.00
+                            </span>
+
+                        </td>
+
+
+                        <!-- CONSULTATION FEE -->
+
+                        <td class="amount">
+
+                            Rs.
+
+                            <span th:text="${payment.consultationFee}">
+                                500.00
+                            </span>
+
+                        </td>
+
+
+                        <!-- TOTAL AMOUNT -->
+
+                        <td class="amount">
+
+                            Rs.
+
+                            <span th:text="${payment.amount}">
+                                2500.00
+                            </span>
+
+                        </td>
+
+
+                        <!-- PAYMENT METHOD -->
+
+                        <td th:text="${payment.paymentMethod}">
+
+                            Cash
+
+                        </td>
+
+
+                        <!-- PAYMENT DATE -->
+
+                        <td th:text="${payment.paymentDate}">
+
+                            2026-09-01
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+
+                            <span class="status-badge status-paid"
+                                  th:if="${payment.status == 'Paid'}">
+
+                                Paid
+
+                            </span>
+
+
+                            <span class="status-badge status-pending"
+                                  th:if="${payment.status == 'Pending'}">
+
+                                Pending
+
+                            </span>
+
+
+                            <span class="status-badge status-refunded"
+                                  th:if="${payment.status == 'Refunded'}">
+
+                                Refunded
+
+                            </span>
+
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+
+                            <!-- PRINT BILL -->
+
+                            <a th:href="@{/payments/bill/{id}(id=${payment.id})}"
+                               class="bill-link">
+
+                                Print Bill
+
+                            </a>
+
+
+                            <!-- EDIT -->
+
+                            <a th:href="@{/payments/edit/{id}(id=${payment.id})}"
+                               class="edit-link">
+
+                                Edit
+
+                            </a>
+
+
+                            <!-- DELETE -->
+
+                            <a th:href="@{/payments/delete/{id}(id=${payment.id})}"
+                               class="delete-link"
+                               onclick="return confirm('Are you sure you want to delete this payment?');">
+
+                                Delete
+
+                            </a>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    <!-- ================= EMPTY ================= -->
+
+                    <tr th:if="${#lists.isEmpty(payments)}">
+
+                        <td colspan="10"
+                            class="empty-row">
+
+                            No payments recorded yet.
+
+                        </td>
+
+                    </tr>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>
