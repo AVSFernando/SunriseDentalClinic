@@ -528,3 +528,46 @@ a {
         min-width: 700px;
     }
 }
+/* =========================
+   HELP SECTION
+========================= */
+
+.help-content {
+    padding: 25px;
+    display: grid;
+    gap: 20px;
+}
+
+.help-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e9ecef;
+}
+
+.help-card h2 {
+    margin: 0 0 15px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.help-card p {
+    margin: 0;
+    line-height: 1.7;
+}
+
+.help-card ol,
+.help-card ul {
+    margin: 0;
+    padding-left: 25px;
+}
+
+.help-card li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.help-card li:last-child {
+    margin-bottom: 0;
+}

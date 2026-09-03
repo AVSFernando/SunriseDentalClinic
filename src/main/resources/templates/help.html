@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Help | Sunrise Dental Clinic</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+
+<div class="dashboard-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="clinic-logo">
+            <div class="logo-icon">SD</div>
+
+            <div>
+                <h2>Sunrise Dental</h2>
+                <span>Clinic Management</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="/dashboard" class="menu-item">
+                🏠
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/patients" class="menu-item">
+                👤
+                <span>Patients</span>
+            </a>
+
+            <a href="/doctors" class="menu-item">
+                👨‍⚕️
+                <span>Doctors</span>
+            </a>
+
+            <a href="/appointments" class="menu-item">
+                📅
+                <span>Appointments</span>
+            </a>
+
+            <a href="/payments" class="menu-item">
+                💳
+                <span>Payments</span>
+            </a>
+
+            <a href="/treatments" class="menu-item">
+                🦷
+                <span>Treatments</span>
+            </a>
+
+            <a href="/reports" class="menu-item">
+                📊
+                <span>Reports</span>
+            </a>
+
+            <a href="/help" class="menu-item active">
+                ❓
+                <span>Help</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="/logout" class="menu-item">
+                🚪
+                <span>Logout</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+                <h1>Help & User Guide</h1>
+                <p>Step-by-step guide for new staff members</p>
+            </div>
+
+        </header>
+
+
+        <!-- HELP CONTENT -->
+        <section class="help-content">
+
+            <div class="help-card">
+
+                <h2>Welcome to Sunrise Dental Clinic</h2>
+
+                <p>
+                    This Help section provides simple step-by-step
+                    instructions for new staff members to use the
+                    Sunrise Dental Clinic Management System.
+                </p>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <h2>1. Getting Started</h2>
+
+                <ol>
+                    <li>Open the Sunrise Dental Clinic system.</li>
+                    <li>Enter your username and password.</li>
+                    <li>Click the <strong>Login</strong> button.</li>
+                    <li>After successful login, the Dashboard will appear.</li>
+                    <li>Use the sidebar menu to access different modules.</li>
+                </ol>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <h2>2. Dashboard</h2>
+
+                <ol>
+                    <li>Open the <strong>Dashboard</strong> from the sidebar.</li>
+                    <li>View the main clinic management options.</li>
+                    <li>Use the quick action buttons to access important functions.</li>
+                    <li>Use the sidebar to move between system modules.</li>
+                </ol>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <h2>3. Patient Management</h2>
+
+                <ol>
+                    <li>Select <strong>Patients</strong> from the sidebar.</li>
+                    <li>Click <strong>Add Patient</strong> to register a new patient.</li>
+                    <li>Enter the patient's required details.</li>
+                    <li>Click <strong>Save</strong>.</li>
+                    <li>Use <strong>Edit</strong> to update patient information.</li>
+                    <li>Use <strong>Delete</strong> to remove an incorrect record.</li>
+                </ol>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <h2>4. Doctor Management</h2>
+
+                <ol>
+                    <li>Select <strong>Doctors</strong> from the sidebar.</li>
+                    <li>Click <strong>Add Doctor</strong>.</li>
+                    <li>Enter the doctor's details.</li>
+                    <li>Click <strong>Save</strong>.</li>
+                    <li>Use <strong>Edit</strong> to update doctor information.</li>
+                    <li>Use <strong>Delete</strong> when a record is no longer required.</li>
+                </ol>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <h2>5. Appointment Management</h2>
+
+                <ol>
+                    <li>Select <strong>Appointments</strong>.</li>
+                    <li>Click <strong>Add Appointment</strong>.</li>
+                    <li>Select the patient.</li>
+                    <li>Select the doctor.</li>
+                    <li>Select the appointment date and time.</li>
+                    <li>Enter the treatment and notes.</li>
+                    <li>Select the appointment status.</li>
+                    <li>Click <strong>Save Appointment</strong>.</li>
+                    <li>The system automatically generates an appointment number.</li>
+                    <li>Use the search box to find an appointment by appointment number.</li>
+                    <li>Use <strong>Edit</strong> or <strong>Delete</strong> when necessary.</li>
+                </ol>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <h2>6. Payment & Billing</h2>
+
+                <ol>
+                    <li>Select <strong>Payments</strong> from the sidebar.</li>
+                    <li>Click <strong>Add Payment</strong>.</li>
+                    <li>Select the patient and appointment.</li>
+                    <li>Enter the treatment cost.</li>
+                    <li>Enter the consultation fee.</li>
+                    <li>The system calculates the total amount automatically.</li>
+                    <li>Select the payment method.</li>
+                    <li>Enter the payment date and status.</li>
+                    <li>Click <strong>Save Payment</strong>.</li>
+                    <li>Click <strong>Print Bill</strong> to view and print the receipt.</li>
+                </ol>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <h2>7. Reports</h2>
+
+                <ol>
+                    <li>Select <strong>Reports</strong> from the sidebar.</li>
+                    <li>Select the required report.</li>
+                    <li>Review the available clinic information.</li>
+                    <li>Use reports to support daily clinic management.</li>
+                </ol>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <h2>8. Logout & Security</h2>
+
+                <ol>
+                    <li>Complete your work before leaving the system.</li>
+                    <li>Click <strong>Logout</strong> from the sidebar.</li>
+                    <li>Always log out when using a shared computer.</li>
+                    <li>Do not share your login password with other users.</li>
+                </ol>
+
+            </div>
+
+
+            <div class="help-card">
+
+                <h2>Important Notes</h2>
+
+                <ul>
+                    <li>Always enter accurate patient information.</li>
+                    <li>Check appointment date and time before saving.</li>
+                    <li>Verify treatment cost and consultation fee before saving a payment.</li>
+                    <li>Check the appointment number when searching for appointments.</li>
+                    <li>Log out after completing your work.</li>
+                </ul>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
